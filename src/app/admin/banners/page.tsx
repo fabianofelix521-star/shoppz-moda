@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 import { adminGetBanners } from "@/actions/admin";
 import { AdminBannerActions } from "./actions";

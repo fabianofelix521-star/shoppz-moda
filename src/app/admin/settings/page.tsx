@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 import { adminGetSetting } from "@/actions/admin";
 import { SettingsForm } from "./settings-form";

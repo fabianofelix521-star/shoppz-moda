@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 import { getOrders } from "@/actions/orders";
 import { BackButton } from "@/components/shared/back-button";

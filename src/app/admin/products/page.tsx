@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 import { adminGetProducts, adminGetCategories } from "@/actions/admin";
 import { formatPrice } from "@/lib/utils";
