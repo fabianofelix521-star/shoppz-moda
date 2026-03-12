@@ -1,26 +1,113 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafafa;
+  --foreground: #111111;
+  --accent: #e24a2b;
+  --accent-light: #fff1ed;
+  --soft-pink: #f8e7ec;
+  --text-secondary: #7a7a7a;
+  --text-muted: #a0a0a0;
+  --border: #e8e8e8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-soft-pink: var(--soft-pink);
+  --color-border-soft: var(--border);
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(244, 210, 220, 0.55),
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(255, 221, 213, 0.55),
+      transparent 24%
+    ),
+    #fafafa;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family:
+    "Inter",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glass card - premium translucent surface */
+.glass-card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0.68)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 20px 50px rgba(17, 17, 17, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+}
+
+/* Promo banner - pink gradient with diagonal stripes */
+.promo-banner {
+  background:
+    linear-gradient(
+      132deg,
+      rgba(244, 210, 220, 0.92) 0%,
+      rgba(248, 231, 236, 0.98) 46%,
+      rgba(255, 255, 255, 0.94) 100%
+    ),
+    repeating-linear-gradient(
+      -24deg,
+      rgba(226, 74, 43, 0.95) 0 18px,
+      rgba(255, 255, 255, 0) 18px 62px
+    );
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+}
+
+/* Hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(226, 74, 43, 0.18);
+  color: #111111;
+}
+
+/* iPhone safe areas */
+@supports (padding-top: env(safe-area-inset-top)) {
+  body {
+    padding-top: env(safe-area-inset-top);
+  }
 }
