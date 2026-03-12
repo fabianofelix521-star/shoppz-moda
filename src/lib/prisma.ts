@@ -6,35 +6,33 @@ import dns from "dns";
 // Monkey-patch dns.lookup to fall back to IPv6 (dns.resolve6) when IPv4 fails.
 // Supabase DB hosts only have AAAA records, and Vercel's dns.lookup() only returns IPv4.
 const _origLookup = dns.lookup;
-dns.lookup = function patchedLookup(
-  hostname: unknown,
-  optionsOrCb?: unknown,
-  cb?: unknown,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(dns as any).lookup = function patchedLookup(
+  hostname: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  optionsOrCb?: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cb?: any,
 ) {
-  const callback =
-    typeof optionsOrCb === "function"
-      ? (optionsOrCb as (err: NodeJS.ErrnoException | null, address: string, family: number) => void)
-      : (cb as (err: NodeJS.ErrnoException | null, address: string, family: number) => void);
-  const options =
-    typeof optionsOrCb === "function" ? {} : (optionsOrCb ?? {});
+  const callback = typeof optionsOrCb === "function" ? optionsOrCb : cb;
+  const options = typeof optionsOrCb === "function" ? {} : (optionsOrCb ?? {});
 
-  // Call original lookup first
-  _origLookup(hostname as string, options as dns.LookupOptions, (err, address, family) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (_origLookup as any).call(dns, hostname, options, (err: NodeJS.ErrnoException | null, address: string, family: number) => {
     if (!err) {
       callback(null, address, family);
       return;
     }
-    // If IPv4 lookup failed, try DNS resolve6
-    dns.resolve6(hostname as string, (err6, addresses6) => {
+    // If lookup failed (e.g. no IPv4), try DNS resolve6
+    dns.resolve6(hostname, (err6, addresses6) => {
       if (!err6 && addresses6 && addresses6.length > 0) {
         callback(null, addresses6[0], 6);
       } else {
-        // Return original error
         callback(err, address, family);
       }
     });
   });
-} as typeof dns.lookup;
+};
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
