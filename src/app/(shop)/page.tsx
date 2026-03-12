@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { getCategoriesData, getBannersData, getFeaturedData } from "./data";
 import { CategoryCards } from "@/components/home/category-cards";
 import { PromoBanner } from "@/components/home/promo-banner";

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { getOrders } from "@/actions/orders";
 import { BackButton } from "@/components/shared/back-button";
 import { EmptyState } from "@/components/shared/empty-state";

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { adminGetOrders } from "@/actions/admin";
 import { formatPrice } from "@/lib/utils";
 import { AdminOrderActions } from "./actions";

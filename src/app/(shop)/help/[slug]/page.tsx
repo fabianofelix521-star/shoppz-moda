@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { getPublicSetting } from "@/actions/admin";
 import { notFound } from "next/navigation";
 import Link from "next/link";

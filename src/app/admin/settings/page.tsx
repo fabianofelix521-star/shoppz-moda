@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { adminGetSetting } from "@/actions/admin";
 import { SettingsForm } from "./settings-form";
 import { AiApiKeyForm } from "../ai-api-key-form";

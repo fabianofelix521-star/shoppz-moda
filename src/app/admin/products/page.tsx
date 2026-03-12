@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { adminGetProducts, adminGetCategories } from "@/actions/admin";
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";

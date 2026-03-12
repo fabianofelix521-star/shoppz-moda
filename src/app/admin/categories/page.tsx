@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { adminGetCategories } from "@/actions/admin";
 import { AdminCategoryActions } from "./actions";
 import { AddCategoryButton } from "./add-category-button";
