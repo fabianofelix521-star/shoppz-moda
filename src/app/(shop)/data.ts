@@ -1,20 +1,13 @@
-import { prisma } from "@/lib/prisma";
+import { getCategoriesSimple, getBanners, getFeaturedProducts } from "@/lib/db";
 
 export async function getCategoriesData() {
-  return prisma.category.findMany({ orderBy: { name: "asc" } });
+  return getCategoriesSimple();
 }
 
 export async function getBannersData() {
-  return prisma.banner.findMany({
-    where: { active: true },
-    orderBy: { position: "asc" },
-  });
+  return getBanners();
 }
 
 export async function getFeaturedData() {
-  return prisma.product.findMany({
-    where: { featured: true, active: true },
-    include: { images: { orderBy: { position: "asc" } }, category: true },
-    take: 8,
-  });
+  return getFeaturedProducts();
 }

@@ -4,6 +4,7 @@ import { getOrders } from "@/actions/orders";
 import { BackButton } from "@/components/shared/back-button";
 import { EmptyState } from "@/components/shared/empty-state";
 import { formatPrice } from "@/lib/utils";
+import { OrderItem } from "@/types";
 import { Package } from "lucide-react";
 import Image from "next/image";
 
@@ -49,7 +50,7 @@ export default async function OrdersPage() {
               </div>
 
               <div className="flex gap-2 overflow-x-auto">
-                {order.items.map((item) => (
+                {order.items.map((item: OrderItem) => (
                   <div
                     key={item.id}
                     className="w-16 h-16 rounded-xl overflow-hidden bg-[#F3F3F3] flex-shrink-0 relative"

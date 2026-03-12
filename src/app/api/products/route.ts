@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import * as db from "@/lib/db";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -11,47 +11,12 @@ export async function GET(request: NextRequest) {
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "20");
 
-  const where: Record<string, unknown> = { active: true };
-
   if (ids) {
-    where.id = { in: ids.split(",") };
+    const products = await db.findProductsByIds(ids.split(","));
+    return NextResponse.json({ products, total: products.length, pages: 1 });
   }
 
-  if (category) {
-    where.category = { slug: category };
-  }
+  const result = await db.getProducts({ category, search, sort, page, limit });
 
-  if (search) {
-    where.OR = [
-      { name: { contains: search, mode: "insensitive" } },
-      { brand: { contains: search, mode: "insensitive" } },
-      { description: { contains: search, mode: "insensitive" } },
-    ];
-  }
-
-  const orderBy =
-    sort === "price-asc"
-      ? { price: "asc" as const }
-      : sort === "price-desc"
-        ? { price: "desc" as const }
-        : sort === "popular"
-          ? { rating: "desc" as const }
-          : { createdAt: "desc" as const };
-
-  const [products, total] = await Promise.all([
-    prisma.product.findMany({
-      where,
-      include: { images: { orderBy: { position: "asc" } }, category: true },
-      orderBy,
-      skip: (page - 1) * limit,
-      take: limit,
-    }),
-    prisma.product.count({ where }),
-  ]);
-
-  return NextResponse.json({
-    products,
-    total,
-    pages: Math.ceil(total / limit),
-  });
+  return NextResponse.json(result);
 }

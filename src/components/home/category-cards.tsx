@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Category } from "@prisma/client";
+import { Category } from "@/types";
 
 export function CategoryCards({ categories }: { categories: Category[] }) {
   const women = categories.find((c) => c.slug === "women");

@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+import { findUserRole } from "@/lib/db";
 import { AdminSidebar } from "@/components/layout/admin-sidebar";
 
 export default async function AdminLayout({
@@ -13,12 +13,9 @@ export default async function AdminLayout({
   const session = await auth();
   if (!session?.user?.id) redirect("/auth/login");
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true },
-  });
+  const role = await findUserRole(session.user.id);
 
-  if (user?.role !== "ADMIN") redirect("/");
+  if (role !== "ADMIN") redirect("/");
 
   return (
     <div className="flex min-h-screen bg-gray-50">

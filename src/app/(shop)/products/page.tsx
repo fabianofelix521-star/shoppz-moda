@@ -10,8 +10,7 @@ import { ProductGrid } from "@/components/product/product-grid";
 import { ProductGridSkeleton } from "@/components/shared/loading";
 import { EmptyState } from "@/components/shared/empty-state";
 import { formatNumber } from "@/lib/utils";
-import { ProductWithImages, SortOption } from "@/types";
-import { Category } from "@prisma/client";
+import { ProductWithImages, SortOption, Category } from "@/types";
 
 export default function ProductsPage() {
   return (

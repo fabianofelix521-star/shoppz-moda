@@ -13,7 +13,7 @@ export default async function AdminBannersPage() {
       </div>
 
       <div className="grid gap-4">
-        {banners.map((banner) => (
+        {banners.map((banner: any) => (
           <div
             key={banner.id}
             className="bg-white rounded-2xl border border-gray-200 p-5 flex items-center justify-between"

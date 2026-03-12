@@ -24,7 +24,7 @@ export default async function AdminOrdersPage() {
 
       {/* Mobile cards */}
       <div className="lg:hidden space-y-3">
-        {orders.map((order) => (
+        {orders.map((order: any) => (
           <div
             key={order.id}
             className="bg-white rounded-2xl border border-gray-200 p-4"
@@ -101,7 +101,7 @@ export default async function AdminOrdersPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {orders.map((order) => (
+            {orders.map((order: any) => (
               <tr key={order.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3">
                   <p className="text-sm font-medium text-gray-900">

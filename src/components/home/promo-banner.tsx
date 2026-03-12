@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Banner } from "@prisma/client";
+import { Banner } from "@/types";
 
 export function PromoBanner({ banner }: { banner: Banner }) {
   return (

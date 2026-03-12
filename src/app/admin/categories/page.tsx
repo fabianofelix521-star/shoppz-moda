@@ -16,7 +16,7 @@ export default async function AdminCategoriesPage() {
 
       {/* Mobile cards */}
       <div className="lg:hidden space-y-3">
-        {categories.map((category) => (
+        {categories.map((category: any) => (
           <div
             key={category.id}
             className="bg-white rounded-2xl border border-gray-200 p-4"
@@ -64,7 +64,7 @@ export default async function AdminCategoriesPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {categories.map((category) => (
+            {categories.map((category: any) => (
               <tr key={category.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3 text-sm font-medium text-gray-900">
                   {category.name}

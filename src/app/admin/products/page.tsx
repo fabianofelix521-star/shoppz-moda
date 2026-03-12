@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { adminGetProducts, adminGetCategories } from "@/actions/admin";
 import { formatPrice } from "@/lib/utils";
+import { ProductImage, Category } from "@/types";
 import Image from "next/image";
 import { AdminProductActions } from "./actions";
 import { AddProductButton } from "./add-product-button";
@@ -19,14 +20,14 @@ export default async function AdminProductsPage() {
         <div className="flex items-center gap-3">
           <span className="text-sm text-gray-500">{products.length} total</span>
           <AddProductButton
-            categories={categories.map((c) => ({ id: c.id, name: c.name }))}
+            categories={categories.map((c: Category) => ({ id: c.id, name: c.name }))}
           />
         </div>
       </div>
 
       {/* Mobile cards */}
       <div className="lg:hidden space-y-3">
-        {products.map((product) => (
+        {products.map((product: any) => (
           <div
             key={product.id}
             className="bg-white rounded-2xl border border-gray-200 p-4"
@@ -80,9 +81,9 @@ export default async function AdminProductsPage() {
                   sizes: product.sizes,
                   categoryId: product.categoryId,
                   featured: product.featured,
-                  images: product.images.map((i) => ({ url: i.url })),
+                  images: product.images.map((i: ProductImage) => ({ url: i.url })),
                 }}
-                categories={categories.map((c) => ({ id: c.id, name: c.name }))}
+                categories={categories.map((c: Category) => ({ id: c.id, name: c.name }))}
               />
             </div>
           </div>
@@ -112,7 +113,7 @@ export default async function AdminProductsPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {products.map((product) => (
+            {products.map((product: any) => (
               <tr key={product.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
@@ -166,9 +167,9 @@ export default async function AdminProductsPage() {
                       sizes: product.sizes,
                       categoryId: product.categoryId,
                       featured: product.featured,
-                      images: product.images.map((i) => ({ url: i.url })),
+                      images: product.images.map((i: ProductImage) => ({ url: i.url })),
                     }}
-                    categories={categories.map((c) => ({
+                    categories={categories.map((c: Category) => ({
                       id: c.id,
                       name: c.name,
                     }))}

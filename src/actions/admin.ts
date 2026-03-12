@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import * as db from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { slugify } from "@/lib/utils";
@@ -8,20 +8,14 @@ import { slugify } from "@/lib/utils";
 async function requireAdmin() {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true },
-  });
-  if (user?.role !== "ADMIN") throw new Error("Forbidden");
+  const role = await db.findUserRole(session.user.id);
+  if (role !== "ADMIN") throw new Error("Forbidden");
   return session;
 }
 
 export async function adminGetProducts() {
   await requireAdmin();
-  return prisma.product.findMany({
-    include: { images: { orderBy: { position: "asc" } }, category: true },
-    orderBy: { createdAt: "desc" },
-  });
+  return db.adminGetProducts();
 }
 
 export async function adminCreateProduct(data: {
@@ -38,21 +32,9 @@ export async function adminCreateProduct(data: {
   await requireAdmin();
   const slug = slugify(data.name);
 
-  const product = await prisma.product.create({
-    data: {
-      name: data.name,
-      slug,
-      brand: data.brand,
-      description: data.description,
-      price: data.price,
-      compareAt: data.compareAt,
-      sizes: data.sizes,
-      categoryId: data.categoryId,
-      featured: data.featured,
-      images: {
-        create: data.images.map((url, i) => ({ url, position: i })),
-      },
-    },
+  const product = await db.adminCreateProduct({
+    ...data,
+    slug,
   });
 
   revalidatePath("/admin/products");
@@ -76,22 +58,11 @@ export async function adminUpdateProduct(
   },
 ) {
   await requireAdmin();
-  const { images, ...rest } = data;
 
-  const product = await prisma.product.update({
-    where: { id },
-    data: {
-      ...rest,
-      slug: rest.name ? slugify(rest.name) : undefined,
-    },
+  const product = await db.adminUpdateProduct(id, {
+    ...data,
+    slug: data.name ? slugify(data.name) : undefined,
   });
-
-  if (images) {
-    await prisma.productImage.deleteMany({ where: { productId: id } });
-    await prisma.productImage.createMany({
-      data: images.map((url, i) => ({ url, position: i, productId: id })),
-    });
-  }
 
   revalidatePath("/admin/products");
   revalidatePath("/products");
@@ -101,35 +72,26 @@ export async function adminUpdateProduct(
 
 export async function adminDeleteProduct(id: string) {
   await requireAdmin();
-  await prisma.product.delete({ where: { id } });
+  await db.adminDeleteProduct(id);
   revalidatePath("/admin/products");
   revalidatePath("/products");
 }
 
 export async function adminGetOrders() {
   await requireAdmin();
-  return prisma.order.findMany({
-    include: { items: true, user: { select: { name: true, email: true } } },
-    orderBy: { createdAt: "desc" },
-  });
+  return db.adminGetOrders();
 }
 
 export async function adminUpdateOrderStatus(id: string, status: string) {
   await requireAdmin();
-  const order = await prisma.order.update({
-    where: { id },
-    data: { status: status as any },
-  });
+  const order = await db.adminUpdateOrderStatus(id, status);
   revalidatePath("/admin/orders");
   return order;
 }
 
 export async function adminGetCategories() {
   await requireAdmin();
-  return prisma.category.findMany({
-    include: { _count: { select: { products: true } } },
-    orderBy: { name: "asc" },
-  });
+  return db.getCategories();
 }
 
 export async function adminCreateCategory(data: {
@@ -138,8 +100,9 @@ export async function adminCreateCategory(data: {
   image?: string;
 }) {
   await requireAdmin();
-  const category = await prisma.category.create({
-    data: { ...data, slug: slugify(data.name) },
+  const category = await db.adminCreateCategory({
+    ...data,
+    slug: slugify(data.name),
   });
   revalidatePath("/admin/categories");
   return category;
@@ -150,12 +113,9 @@ export async function adminUpdateCategory(
   data: { name?: string; description?: string; image?: string },
 ) {
   await requireAdmin();
-  const category = await prisma.category.update({
-    where: { id },
-    data: {
-      ...data,
-      slug: data.name ? slugify(data.name) : undefined,
-    },
+  const category = await db.adminUpdateCategory(id, {
+    ...data,
+    slug: data.name ? slugify(data.name) : undefined,
   });
   revalidatePath("/admin/categories");
   return category;
@@ -163,13 +123,13 @@ export async function adminUpdateCategory(
 
 export async function adminDeleteCategory(id: string) {
   await requireAdmin();
-  await prisma.category.delete({ where: { id } });
+  await db.adminDeleteCategory(id);
   revalidatePath("/admin/categories");
 }
 
 export async function adminGetBanners() {
   await requireAdmin();
-  return prisma.banner.findMany({ orderBy: { position: "asc" } });
+  return db.adminGetBanners();
 }
 
 export async function adminCreateBanner(data: {
@@ -180,7 +140,7 @@ export async function adminCreateBanner(data: {
   bgColor?: string;
 }) {
   await requireAdmin();
-  const banner = await prisma.banner.create({ data });
+  const banner = await db.adminCreateBanner(data);
   revalidatePath("/admin/banners");
   revalidatePath("/");
   return banner;
@@ -188,7 +148,7 @@ export async function adminCreateBanner(data: {
 
 export async function adminDeleteBanner(id: string) {
   await requireAdmin();
-  await prisma.banner.delete({ where: { id } });
+  await db.adminDeleteBanner(id);
   revalidatePath("/admin/banners");
   revalidatePath("/");
 }
@@ -196,48 +156,37 @@ export async function adminDeleteBanner(id: string) {
 export async function adminGetDashboardStats() {
   await requireAdmin();
   const [productCount, orderCount, userCount, revenue] = await Promise.all([
-    prisma.product.count(),
-    prisma.order.count(),
-    prisma.user.count(),
-    prisma.order.aggregate({ _sum: { total: true } }),
+    db.countProducts(),
+    db.countOrders(),
+    db.countUsers(),
+    db.sumOrderTotal(),
   ]);
 
   return {
     products: productCount,
     orders: orderCount,
     users: userCount,
-    revenue: revenue._sum.total || 0,
+    revenue,
   };
 }
 
 export async function adminGetSetting(key: string) {
   await requireAdmin();
-  const setting = await prisma.setting.findUnique({ where: { key } });
-  return setting?.value ?? "";
+  return db.getSetting(key);
 }
 
 export async function adminSaveSetting(key: string, value: string) {
   await requireAdmin();
-  await prisma.setting.upsert({
-    where: { key },
-    update: { value },
-    create: { key, value },
-  });
+  await db.saveSetting(key, value);
   revalidatePath("/admin");
   revalidatePath("/");
 }
 
 // Public: read a setting without admin check (for footer, logo, etc.)
 export async function getPublicSetting(key: string) {
-  const setting = await prisma.setting.findUnique({ where: { key } });
-  return setting?.value ?? "";
+  return db.getSetting(key);
 }
 
 export async function getPublicSettings(keys: string[]) {
-  const settings = await prisma.setting.findMany({
-    where: { key: { in: keys } },
-  });
-  const map: Record<string, string> = {};
-  for (const s of settings) map[s.key] = s.value;
-  return map;
+  return db.getSettings(keys);
 }
