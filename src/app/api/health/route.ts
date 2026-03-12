@@ -7,8 +7,12 @@ export async function GET() {
   const checks: Record<string, unknown> = {
     timestamp: new Date().toISOString(),
     env: {
-      DATABASE_URL: process.env.DATABASE_URL ? process.env.DATABASE_URL.replace(/:[^@]+@/, ":***@") : "NOT SET",
-      DIRECT_URL: process.env.DIRECT_URL ? process.env.DIRECT_URL.replace(/:[^@]+@/, ":***@") : "NOT SET",
+      DATABASE_URL: process.env.DATABASE_URL
+        ? process.env.DATABASE_URL.replace(/:[^@]+@/, ":***@")
+        : "NOT SET",
+      DIRECT_URL: process.env.DIRECT_URL
+        ? process.env.DIRECT_URL.replace(/:[^@]+@/, ":***@")
+        : "NOT SET",
     },
   };
 
@@ -24,6 +28,9 @@ export async function GET() {
     };
   }
 
-  const status = (checks.database as Record<string, unknown>).status === "connected" ? 200 : 500;
+  const status =
+    (checks.database as Record<string, unknown>).status === "connected"
+      ? 200
+      : 500;
   return NextResponse.json(checks, { status });
 }
