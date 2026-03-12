@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import dns from "dns";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,19 @@ export async function GET() {
         : "NOT SET",
     },
   };
+
+  // DNS check
+  try {
+    const host = "db.rxlbfqwwfsinnirbpnsv.supabase.co";
+    const [resolve4, resolve6, resolveAll] = await Promise.allSettled([
+      new Promise((res, rej) => dns.resolve4(host, (err, addr) => err ? rej(err) : res(addr))),
+      new Promise((res, rej) => dns.resolve6(host, (err, addr) => err ? rej(err) : res(addr))),
+      new Promise((res, rej) => dns.resolve(host, (err, addr) => err ? rej(err) : res(addr))),
+    ]);
+    checks.dns = { resolve4, resolve6, resolveAll };
+  } catch (e) {
+    checks.dns = { error: String(e) };
+  }
 
   try {
     const result = await prisma.$queryRaw`SELECT 1 as ok`;
