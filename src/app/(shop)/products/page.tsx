@@ -75,9 +75,9 @@ function ProductsContent() {
   };
 
   return (
-    <div className="min-h-screen mx-auto max-w-7xl">
+    <div className="min-h-screen mx-auto max-w-7xl space-y-4">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-5 pt-2 pb-3">
+      <div className="flex items-center justify-between px-5 pt-2 pb-0">
         <BackButton />
         <div className="text-center">
           <h1 className="text-base font-bold text-[#111111]">
@@ -120,11 +120,13 @@ function ProductsContent() {
       )}
 
       {/* Category chips */}
-      <CategoryChips
-        categories={categories}
-        selected={category}
-        onSelect={(slug) => updateParams("category", slug)}
-      />
+      <div>
+        <CategoryChips
+          categories={categories}
+          selected={category}
+          onSelect={(slug) => updateParams("category", slug)}
+        />
+      </div>
 
       {/* Filter bar */}
       <FilterBar sort={sort} onSortChange={(s) => updateParams("sort", s)} />
@@ -138,7 +140,9 @@ function ProductsContent() {
           description="Tente ajustar seus filtros ou termos de busca"
         />
       ) : (
-        <ProductGrid products={products} />
+        <div className="pb-6">
+          <ProductGrid products={products} />
+        </div>
       )}
     </div>
   );

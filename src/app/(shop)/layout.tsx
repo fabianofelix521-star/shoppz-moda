@@ -15,7 +15,7 @@ export default async function ShopLayout({
   return (
     <>
       <Header logoUrl={logoUrl} />
-      <main className="pb-28 lg:pb-0">{children}</main>
+      <main className="pt-2 pb-28 lg:pb-0">{children}</main>
       <Footer />
       <BottomNav />
     </>

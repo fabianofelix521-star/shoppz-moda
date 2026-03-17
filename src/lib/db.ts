@@ -322,16 +322,14 @@ export async function adminCreateProduct(data: {
   );
 
   if (images.length) {
-    await sb
-      .from("ProductImage")
-      .insert(
-        images.map((url, i) => ({
-          id: cuid(),
-          url,
-          position: i,
-          productId: id,
-        })),
-      );
+    await sb.from("ProductImage").insert(
+      images.map((url, i) => ({
+        id: cuid(),
+        url,
+        position: i,
+        productId: id,
+      })),
+    );
   }
 
   return product;
@@ -368,16 +366,14 @@ export async function adminUpdateProduct(
   if (images) {
     await sb.from("ProductImage").delete().eq("productId", id);
     if (images.length) {
-      await sb
-        .from("ProductImage")
-        .insert(
-          images.map((url, i) => ({
-            id: cuid(),
-            url,
-            position: i,
-            productId: id,
-          })),
-        );
+      await sb.from("ProductImage").insert(
+        images.map((url, i) => ({
+          id: cuid(),
+          url,
+          position: i,
+          productId: id,
+        })),
+      );
     }
   }
 

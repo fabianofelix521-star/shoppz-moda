@@ -20,7 +20,10 @@ export default async function AdminProductsPage() {
         <div className="flex items-center gap-3">
           <span className="text-sm text-gray-500">{products.length} total</span>
           <AddProductButton
-            categories={categories.map((c: Category) => ({ id: c.id, name: c.name }))}
+            categories={categories.map((c: Category) => ({
+              id: c.id,
+              name: c.name,
+            }))}
           />
         </div>
       </div>
@@ -81,9 +84,14 @@ export default async function AdminProductsPage() {
                   sizes: product.sizes,
                   categoryId: product.categoryId,
                   featured: product.featured,
-                  images: product.images.map((i: ProductImage) => ({ url: i.url })),
+                  images: product.images.map((i: ProductImage) => ({
+                    url: i.url,
+                  })),
                 }}
-                categories={categories.map((c: Category) => ({ id: c.id, name: c.name }))}
+                categories={categories.map((c: Category) => ({
+                  id: c.id,
+                  name: c.name,
+                }))}
               />
             </div>
           </div>
@@ -167,7 +175,9 @@ export default async function AdminProductsPage() {
                       sizes: product.sizes,
                       categoryId: product.categoryId,
                       featured: product.featured,
-                      images: product.images.map((i: ProductImage) => ({ url: i.url })),
+                      images: product.images.map((i: ProductImage) => ({
+                        url: i.url,
+                      })),
                     }}
                     categories={categories.map((c: Category) => ({
                       id: c.id,

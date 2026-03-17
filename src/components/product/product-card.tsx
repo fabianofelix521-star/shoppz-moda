@@ -12,7 +12,7 @@ export function ProductCard({ product }: { product: ProductWithImages }) {
 
   return (
     <Link href={`/products/${product.id}`} className="group block">
-      <div className="glass-card rounded-[24px] p-3">
+      <div className="glass-card rounded-[24px] p-3 mb-1">
         <div className="relative aspect-[3/4] rounded-[20px] overflow-hidden bg-[#F3F3F3] mb-2.5">
           {image && (
             <Image

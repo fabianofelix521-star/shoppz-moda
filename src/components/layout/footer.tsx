@@ -95,7 +95,7 @@ export async function Footer() {
   ].filter((s) => s.url);
 
   return (
-    <footer className="mt-10 border-t border-[#E8E8E8] bg-[#111111] text-white">
+    <footer className="mt-12 border-t border-[#E8E8E8] bg-[#111111] text-white">
       <div className="mx-auto max-w-7xl px-5 py-12 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}

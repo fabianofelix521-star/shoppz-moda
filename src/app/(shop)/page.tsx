@@ -17,7 +17,7 @@ export default async function HomePage() {
   const editorialProduct = featured[featured.length - 1];
 
   return (
-    <div className="space-y-6 py-2 mx-auto max-w-7xl">
+    <div className="space-y-8 py-4 mx-auto max-w-7xl">
       {/* Category cards - Women & Men */}
       <CategoryCards categories={categories} />
 

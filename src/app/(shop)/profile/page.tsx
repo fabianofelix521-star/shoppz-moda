@@ -33,8 +33,8 @@ export default async function ProfilePage() {
   ];
 
   return (
-    <div className="min-h-screen mx-auto max-w-3xl">
-      <div className="flex items-center gap-3 px-5 pt-2 pb-4">
+    <div className="min-h-screen mx-auto max-w-3xl space-y-4">
+      <div className="flex items-center gap-3 px-5 pt-2 pb-0">
         <BackButton />
         <h1 className="text-lg font-bold text-[#111111]">Perfil</h1>
       </div>

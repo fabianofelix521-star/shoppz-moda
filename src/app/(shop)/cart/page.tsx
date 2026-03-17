@@ -13,8 +13,8 @@ export default function CartPage() {
   const items = useCartStore((s) => s.items);
 
   return (
-    <div className="min-h-screen mx-auto max-w-7xl">
-      <div className="flex items-center gap-3 px-5 pt-2 pb-4">
+    <div className="min-h-screen mx-auto max-w-7xl space-y-4">
+      <div className="flex items-center gap-3 px-5 pt-2 pb-0">
         <BackButton />
         <h1 className="text-lg font-bold text-[#111111]">Sacola de Compras</h1>
         <span className="text-sm text-[#A0A0A0] ml-auto">

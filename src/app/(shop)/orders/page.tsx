@@ -12,8 +12,8 @@ export default async function OrdersPage() {
   const orders = await getOrders();
 
   return (
-    <div className="min-h-screen mx-auto max-w-3xl">
-      <div className="flex items-center gap-3 px-5 pt-2 pb-4">
+    <div className="min-h-screen mx-auto max-w-3xl space-y-4">
+      <div className="flex items-center gap-3 px-5 pt-2 pb-0">
         <BackButton />
         <h1 className="text-lg font-bold text-[#111111]">Meus Pedidos</h1>
       </div>
@@ -25,7 +25,7 @@ export default async function OrdersPage() {
           description="Seu histórico de pedidos aparecerá aqui"
         />
       ) : (
-        <div className="px-5 space-y-4 pb-8">
+        <div className="px-5 space-y-4 pb-8 -mt-1">
           {orders.map((order) => (
             <div
               key={order.id}
